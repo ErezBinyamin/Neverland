@@ -1,0 +1,2 @@
+# .gitignore rules for files that should not be tracked by git
+.image*
