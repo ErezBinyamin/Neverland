@@ -6,7 +6,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/New_York
 
 # Update the package list and install essential tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update --fix-missing
+RUN apt-get install -y --no-install-recommends \
     bc \
     curl \
     wget \
@@ -15,21 +16,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip
 RUN apt-get install -y --no-install-recommends \
-    nmap \
     netcat \
+    usbutils \
+    nmap \
     tcpdump \
     tshark \
     net-tools \
     dnsutils \
+    openocd \
     iputils-ping \
-    curl \
-    wget \
-    git \
-    vim \
-    python3 \
-    python3-pip \
     build-essential \
     forensics-all
+
 # Install additional Python packages for pentesting
 RUN pip3 install --no-cache-dir \
     pwntools \
