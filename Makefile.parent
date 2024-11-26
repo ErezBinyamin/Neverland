@@ -1,0 +1,37 @@
+# This Makefile.parent defines all the rules you need for child projects
+# All you need to do is define the below envars then 'include Makefile.parent'
+#
+# IMAGE_NAME=cyber
+# DEPS=Dockerfile
+# KEEPFILE=.imagebuild_$(IMAGE_NAME)
+# include ../Makefile.parent
+DOCKER_USERNAME?=erezbinyamin
+
+$(IMAGE_NAME): build
+$(KEEPFILE): build
+build:$(DEPS)
+	docker build --tag $(IMAGE_NAME) .
+	touch $(KEEPFILE)
+
+rebuild:
+	docker build --no-cache --tag $(IMAGE_NAME) .
+	touch $(KEEPFILE)
+
+bash: build
+	docker run -it --network host --privileged $(IMAGE_NAME)
+
+clean:
+	docker image rm $(IMAGE_NAME)
+	rm -f $(KEEPFILE)
+
+push:
+	docker push $(DOCKER_USERNAME)/$(IMAGE_NAME)
+
+help:
+	@echo "Supported build targets:"
+	@echo "  $(IMAGE_NAME): builds image"
+	@echo "  build: .."
+	@echo "  rebuild: .."
+	@echo "  bash: launches shell inside container"
+	@echo "  clean: removes docker image from local repository"
+	@echo "  help: prints this help menu"
