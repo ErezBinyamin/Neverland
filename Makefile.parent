@@ -8,8 +8,8 @@
 DOCKER_USERNAME?=erezbinyamin
 
 $(IMAGE_NAME): build
-$(KEEPFILE): build
-build:$(DEPS)
+build:$(KEEPFILE)
+$(KEEPFILE): $(DEPS)
 	docker build --tag $(IMAGE_NAME) .
 	touch $(KEEPFILE)
 
