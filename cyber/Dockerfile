@@ -27,6 +27,8 @@ RUN apt-get install -y --no-install-recommends \
     iputils-ping \
     build-essential \
     forensics-all
+RUN apt-get install -y --no-install-recommends \
+    whois
 
 # Install additional Python packages for pentesting
 RUN pip3 install --no-cache-dir \
