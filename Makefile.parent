@@ -6,6 +6,7 @@
 # KEEPFILE=.imagebuild_$(IMAGE_NAME)
 # include ../Makefile.parent
 DOCKER_USERNAME?=erezbinyamin
+PUSHTAG?=latest
 
 build:$(KEEPFILE)
 $(KEEPFILE): $(DEPS)
@@ -24,6 +25,7 @@ clean:
 	rm -f $(KEEPFILE)
 
 push:
+	docker tag $(IMAGE_NAME) $(DOCKER_USERNAME)/$(IMAGE_NAME):$(PUSHTAG)
 	docker push $(DOCKER_USERNAME)/$(IMAGE_NAME)
 
 help:
