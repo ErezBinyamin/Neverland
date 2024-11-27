@@ -1,0 +1,26 @@
+#!/bin/bash
+export WINEPREFIX="$HOME/.PlayOnLinux/wineprefix/Games/"
+export WINEARCH=win32
+export WINE="/opt/wine-staging/bin/wine"
+export LIBGL_ALWAYS_SOFTWARE=1 
+
+alias ls='ls --color'
+
+cat /home/splash.txt
+
+if [ -d "/root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth/" ]
+then
+	printf "\n\n
+		Path to EE original : /root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth/Empire Earth
+		Path to EE expansion: /root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth/Empire Earth
+		 
+		To play Empire Earth:
+			1. Move to game directory     : '# cd DIR'
+			2. Launch executable with wine: '# wine GAME.exe'
+		\n\n"
+else
+	printf "\n\n
+		The rest of the install needs to be done manually after being launched with correct envars and whatnot (GUI stuff)
+		See gist: https://gist.github.com/ErezBinyamin/6199e8fe1388c0521d6398e380641cdf
+		\n\n"
+fi
