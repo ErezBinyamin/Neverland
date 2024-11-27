@@ -4,4 +4,4 @@ KEEPFILE=.imagebuild_$(IMAGE_NAME)
 include ../Makefile.parent
 
 bash: build
-	Must run ee2wine function defined in ee2wine.sh to run properly
+	@echo Must run ee2wine function defined in ee2wine.sh to run properly
