@@ -7,7 +7,6 @@
 # include ../Makefile.parent
 DOCKER_USERNAME?=erezbinyamin
 
-$(IMAGE_NAME): build
 build:$(KEEPFILE)
 $(KEEPFILE): $(DEPS)
 	docker build --tag $(IMAGE_NAME) .
