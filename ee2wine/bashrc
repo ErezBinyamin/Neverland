@@ -8,11 +8,12 @@ alias ls='ls --color'
 
 cat /home/splash.txt
 
-if [ -d "/root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth/" ]
+INSTALLDIR="/root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth/"
+if [ -d "${INSTALLDIR}" ]
 then
 	printf "\n\n
-		Path to EE original : /root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth/Empire Earth
-		Path to EE expansion: /root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth/Empire Earth
+		Path to EE original : ${INSTALLDIR}/Empire Earth
+		Path to EE expansion: ${INSTALLDIR}/...
 		 
 		To play Empire Earth:
 			1. Move to game directory     : '# cd DIR'
