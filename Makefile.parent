@@ -21,7 +21,7 @@ bash: build
 	docker run -it --network host --privileged $(IMAGE_NAME)
 
 clean:
-	docker image rm $(IMAGE_NAME)
+	docker images | grep -q $(IMAGE_NAME) && docker image rm $(IMAGE_NAME) || true
 	rm -f $(KEEPFILE)
 
 push:
