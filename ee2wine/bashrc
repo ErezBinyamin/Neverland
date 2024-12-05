@@ -12,8 +12,8 @@ INSTALLDIR="/root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Ear
 if [ -d "${INSTALLDIR}" ]
 then
 	printf "\n\n
-		Path to EE original : ${INSTALLDIR}/Empire Earth
-		Path to EE expansion: ${INSTALLDIR}/...
+		Path to EE original : \"${INSTALLDIR}/Empire Earth\"
+		Path to EE expansion: \"${INSTALLDIR}/Empire Earth - The Art of Conquest\"
 		 
 		To play Empire Earth:
 			1. Move to game directory     : '# cd DIR'
