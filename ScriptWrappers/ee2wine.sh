@@ -55,3 +55,5 @@ ee2wine() {
 		echo "Unknown error: Go debug ee2wine.sh and have fun in docker wine land"
 	fi
 }
+# Run if called with `bash ee2wine.sh`, Do not run if called by `source ee2wine.sh`
+[[ "$0" =~ "ee2wine.sh" ]] && ee2wine $@
