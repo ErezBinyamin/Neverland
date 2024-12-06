@@ -2,15 +2,19 @@
 # Functions that will launch docker containers
 ee2wine() { 	
 	local IMAGE_NAME=${IMAGE_NAME:-erezbinyamin/ee2wine:latest}
-	if [ "${USER_VOLUME}" == "winehome" ] && ! docker volume ls -qf "name=winehome" | grep -q "^winehome$"
-	then
-		echo "INFO: Creating Docker volume container 'winehome'..."
-		docker volume create winehome
-	fi
 	if [ -z "${XAUTHORITY:-${HOME}/.Xauthority}" ]
 	then
 		echo "ERROR: No valid .Xauthority file found for X11"
 		return 1
+	fi
+	if ! docker images | grep -q ${IMAGE_NAME}
+	then
+		docker pull ${IMAGE_NAME}
+	fi
+	if [ "${USER_VOLUME}" == "winehome" ] && ! docker volume ls -qf "name=winehome" | grep -q "^winehome$"
+	then
+		echo "INFO: Creating Docker volume container 'winehome'..."
+		docker volume create winehome
 	fi
 
 	xhost +local:$(id -un)
