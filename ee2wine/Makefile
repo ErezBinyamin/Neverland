@@ -4,4 +4,4 @@ KEEPFILE=.imagebuild_$(IMAGE_NAME)
 include ../Makefile.parent
 
 bash: build
-	bash ee2wine.sh
+	IMAGE_NAME=$(IMAGE_NAME) bash ee2wine.sh
