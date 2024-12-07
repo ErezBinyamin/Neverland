@@ -1,0 +1,6 @@
+#!/bin/bash
+alias ls='ls --color'
+
+printf '** Welcome to the Super Star Trek Docker container! **\n\n'
+cat /home/splash.txt
+printf '\n\nTo play SST just type: ./sst\n\n'
