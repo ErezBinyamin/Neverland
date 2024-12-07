@@ -1,8 +1,7 @@
 IMAGE_NAME?=ee2wine
 DEPS=Dockerfile bashrc splash.txt
-KEEPFILE=.imagebuild_$(IMAGE_NAME)
 include ../Makefile.parent
-ZEROTIER_NETWORK_ID=
+ZEROTIER_NETWORK_ID=272f5eae16481824
 
 play: connect bash
 bash: build

@@ -3,8 +3,8 @@
 #
 # IMAGE_NAME=cyber
 # DEPS=Dockerfile
-# KEEPFILE=.imagebuild_$(IMAGE_NAME)
 # include ../Makefile.parent
+KEEPFILE?=.imagebuild_$(IMAGE_NAME)
 DOCKER_USERNAME?=erezbinyamin
 PUSHTAG?=latest
 
