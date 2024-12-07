@@ -60,4 +60,5 @@ ee2wine() {
 	fi
 }
 # Run if called with `bash ee2wine.sh`, Do not run if called by `source ee2wine.sh`
+# Basically bash equiv of: if __name__ == "__main__"
 [[ "$0" =~ "ee2wine.sh" ]] && ee2wine $@
