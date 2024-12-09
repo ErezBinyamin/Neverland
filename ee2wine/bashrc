@@ -21,11 +21,14 @@ then
 		\n\n"
 else
 	printf "\n\n
-		The rest of the install needs to be done manually after being launched with correct envars and whatnot (GUI stuff)
-		See gist: https://gist.github.com/ErezBinyamin/6199e8fe1388c0521d6398e380641cdf
+                The rest of the install needs to be done manually after being launched with correct envars and whatnot (GUI stuff)
+                See gist: https://gist.github.com/ErezBinyamin/6199e8fe1388c0521d6398e380641cdf
 
-		To start installation:
-			1. Move to install directory : '# cd /root'
-			2. Run install script        : '# ./EE2-Linux-Install.bash'
-		\n\n"
+                To start installation:
+                        1. Move to install directory : '# cd /root'
+                        2. Run install script        : '# ./EE2-Linux-Install.bash'
+                        3. Get container ID          : '# CONTAINER_ID=\$(docker ps | grep ee2wine | cut -d' ' -f1)'
+                        4. Save installed state      : '# docker commit CONTAINER_ID ee2wine:installed'
+                \n\n"
 fi
+
