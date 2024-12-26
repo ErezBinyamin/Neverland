@@ -1,2 +1,5 @@
 # .gitignore rules for files that should not be tracked by git
 .image*
+fireflyIII/*.keep
+fireflyIII/*.env
+fireflyIII/*.yml
