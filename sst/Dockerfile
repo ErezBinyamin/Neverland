@@ -23,8 +23,5 @@ ADD https://almy.us/files/sstlinux.zip /root/
 RUN unzip sstlinux.zip
 ## Create .bashrc with cool ascii art splash screen. base64 encode to avoid special chars in script
 COPY splash.txt /home/splash.txt
-COPY bashrc /home/.bashrc
 COPY bashrc /root/.bashrc
 
-# Entry point for the container
-# ENTRYPOINT ["/bin/bash"]
