@@ -7,10 +7,11 @@
 KEEPFILE?=.imagebuild_$(IMAGE_NAME)
 DOCKER_USERNAME?=erezbinyamin
 PUSHTAG?=latest
+BFLAGS?=
 
 build:$(KEEPFILE)
 $(KEEPFILE): $(DEPS)
-	docker build --tag $(IMAGE_NAME) .
+	docker build $(BFLAGS) --tag $(IMAGE_NAME) .
 	touch $(KEEPFILE)
 
 rebuild:
