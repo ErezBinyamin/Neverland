@@ -14,7 +14,8 @@ RUN apt-get install -y --no-install-recommends \
     git \
     vim \
     python3 \
-    python3-pip
+    python3-pip \
+    bsdmainutils
 RUN apt-get install -y --no-install-recommends \
     netcat \
     usbutils \
@@ -26,10 +27,10 @@ RUN apt-get install -y --no-install-recommends \
     openocd \
     iputils-ping \
     build-essential \
-    forensics-all
-RUN apt-get install -y --no-install-recommends \
+    forensics-all \
     whois \
     udev \
+    screen \
     dosfstools \
     parted
 
