@@ -8,6 +8,7 @@ KEEPFILE?=.imagebuild_$(IMAGE_NAME)
 DOCKER_USERNAME?=erezbinyamin
 PUSHTAG?=latest
 BFLAGS?=
+RFLAGS?=-it --network host --privileged
 
 build:$(KEEPFILE)
 $(KEEPFILE): $(DEPS)
@@ -15,11 +16,11 @@ $(KEEPFILE): $(DEPS)
 	touch $(KEEPFILE)
 
 rebuild:
-	docker build --no-cache --tag $(IMAGE_NAME) .
+	docker build $(BFLAGS) --no-cache --tag $(IMAGE_NAME) .
 	touch $(KEEPFILE)
 
 bash: build
-	docker run -it --network host --privileged $(IMAGE_NAME)
+	docker run $(RFLAGS) $(IMAGE_NAME)
 
 clean:
 	docker images | grep -q "^$(IMAGE_NAME)" && docker image rm $(IMAGE_NAME) || true

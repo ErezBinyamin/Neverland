@@ -1,5 +1,10 @@
 # .gitignore rules for files that should not be tracked by git
 .image*
+
+# fireflyIII
 fireflyIII/*.keep
 fireflyIII/*.env
 fireflyIII/*.yml
+
+# datascience
+datascience/data
