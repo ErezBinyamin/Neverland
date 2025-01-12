@@ -6,5 +6,5 @@ This is just a shell. Do analysis. Don't think too hard. Have fun
 ```
 host$ make bash
 
-datascience$ pandas numpy pyplot
+analyze$ pandas numpy pyplot
 ```
