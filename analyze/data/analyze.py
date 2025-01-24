@@ -3,6 +3,9 @@ import os, csv, argparse
 import pandas as pd
 from pdb import set_trace as bp
 
+def colorize(value):
+    return(f"\033[1;3{('2' if (value>0) else '1')}m{value}\033[0m")
+
 def validate_empowerfile(file_path):
   # Check if file exists
   if not os.path.isfile(file_path):
@@ -51,9 +54,9 @@ def quicklook(filepath):
   print(f"""
   From 2022-07-29 to 2024-12-31:
   
-          income:   \033[1;32m{income}\033[0m
-          expenses: \033[1;31m{expenses}\033[0m
-          net:      \033[1;3{('2' if (income > expenses) else '1')}m{income + expenses}\033[0m
+          income:   {colorize(income)}
+          expenses: {colorize(expenses)}
+          net:      {colorize(income + expenses)}
   
   """)
 
@@ -106,7 +109,6 @@ def category_analysis(filepath):
   
   # Print the results
   print(totals_table.sort_values(by="Amount"))
-
 
 if __name__ == "__main__":
   cli = argparse.ArgumentParser(description="Ingest and analyze Personal Capital aggregated expenses file.")
