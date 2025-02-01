@@ -1,5 +1,5 @@
 # Use the official Ubuntu LTS image as a base
-FROM ubuntu:20.04
+FROM python:latest
 
 # Set the timezone to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
@@ -13,33 +13,41 @@ RUN apt-get install -y --no-install-recommends \
     wget \
     git \
     vim \
-    python3 \
+    python3-full \
     python3-pip \
+    pipx \
     bsdmainutils
 RUN apt-get install -y --no-install-recommends \
-    netcat \
     usbutils \
-    nmap \
-    tcpdump \
-    tshark \
-    net-tools \
-    dnsutils \
     openocd \
-    iputils-ping \
-    build-essential \
-    forensics-all \
-    whois \
     udev \
     screen \
     dosfstools \
     parted
+RUN apt-get install -y --no-install-recommends \
+    netcat-traditional \
+    nmap \
+    tcpdump \
+    tshark \
+    whois \
+    mtr
+RUN apt-get install -y --no-install-recommends \
+    build-essential \
+    binwalk \
+    forensics-all \
+    net-tools \
+    iputils-ping \
+    dnsutils \
+    aircrack-ng \
+    binutils \
+    binutils-arm-none-eabi \
+    netwox \
+    traceroute
 
 # Install additional Python packages for pentesting
-RUN pip3 install --no-cache-dir \
-    pwntools \
-    chepy \
-    requests
-
+RUN pipx ensurepath
+RUN pipx install \
+    pwntools
 # Optional: Install Metasploit
 #RUN curl https://raw.githubusercontent.com/rapid7/metasploit-framework/master/msfinstall | sh
 
