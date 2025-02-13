@@ -13,10 +13,14 @@ RUN apt-get install -y --no-install-recommends \
     wget \
     git \
     vim \
+    snapd \
     python3-full \
     python3-pip \
     pipx \
+    software-properties-common \
     bsdmainutils
+RUN git clone https://github.com/radareorg/radare2.git /opt/radare2 \
+    && /opt/radare2/sys/install.sh
 RUN apt-get install -y --no-install-recommends \
     usbutils \
     openocd \
@@ -50,6 +54,11 @@ RUN pipx install \
     pwntools
 # Optional: Install Metasploit
 #RUN curl https://raw.githubusercontent.com/rapid7/metasploit-framework/master/msfinstall | sh
+
+# Install pwndbg
+RUN git clone --recursive https://github.com/pwndbg/pwndbg.git; \
+    cd pwndbg; \
+    ./setup.sh
 
 # Configure bash environment
 WORKDIR /root
