@@ -22,6 +22,7 @@ RUN pip3 install --no-cache-dir \
     pandas \
     numpy \
     statsmodels \
+    matplotlib \
     requests
 
 # Configure bash environment

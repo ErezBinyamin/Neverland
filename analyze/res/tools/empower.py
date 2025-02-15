@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import os, csv, argparse
 import pandas as pd
+import matplotlib.pyplot as plt
 from pdb import set_trace as bp
 
 def colorize(value):
@@ -110,11 +111,107 @@ def category_analysis(filepath):
   # Print the results
   print(totals_table.sort_values(by="Amount"))
 
+def simplify_category(df):
+  category_mapping = {
+    # Personal Saving
+    "Deposits":"Saving",
+    "Interest":"Saving",
+    "Refunds & Reimbursements":"Saving",
+    "Other Income":"Saving",
+
+    # Personal Current Taxes
+    "Taxes":"Taxes",
+
+    # Health
+    "Healthcare/Medical":"Healthcare",
+    "Child/Dependent":"Healthcare",
+    "Insurance":"Healthcare",
+
+    # Housing, Utilities, and fuels
+    "Automotive":"Housing",
+    "Cable/Satellite":"Housing",
+    "Checks":"Housing",
+    "Dues & Subscriptions":"Housing",
+    "Gasoline/Fuel":"Housing",
+    "Home Improvement":"Housing",
+    "Rent":"Housing",
+    "Utilities":"Housing",
+    "Online Services"
+
+    # Food
+    "Groceries":"Food",
+    "Restaurants":"Food",
+    "ATM/Cash":"Food",
+
+    # Recreational goods & vehichles + recreation services
+    "Entertainment":"Recreational",
+    "Hobbies":"Recreational",
+    "Personal Care":"Recreational",
+    "Travel":"Recreational",
+    "Women":"Recreational",
+    "Gifts":"Recreational",
+    "Electronics":"Recreational",
+    "Charitable Giving":"Recreational",
+
+    # Other
+    "Clothing/Shoes":"Other",
+    "Education":"Other",
+    "General Merchandise":"Other",
+    "Inc Boston Ma":"Other",
+    "Ma Xxx-xxx-2500 Nc":"Other",
+    "Office Supplies":"Other",
+    "Other Expenses":"Other",
+    "Postage & Shipping":"Other",
+    "Printing":"Other",
+    "Service Charges/Fees":"Other"
+  }
+  df["Category"] = df["Category"].map(category_mapping).fillna("Other")
+  return df
+
+def category_plot(filepath):
+  df = pd.read_csv(filepath, parse_dates=["Date"])
+  df["Amount"] = pd.to_numeric(df["Amount"], errors='coerce')
+  df = df[df["Amount"] < 0]
+
+  df = simplify_category(df)
+
+  df["Month"] = df["Date"].dt.to_period("M")
+  monthly_spending = df.groupby(["Month", "Category"])['Amount'].sum().unstack(fill_value=0)
+  total_spending_per_month = monthly_spending.sum(axis=1)
+  spending_percentage = (monthly_spending.T / total_spending_per_month).T * 100
+  plt.figure(figsize=(12, 6))
+  for category in spending_percentage.columns:
+    plt.plot(spending_percentage.index.astype(str), spending_percentage[category], label=category)
+
+  plt.figure(figsize=(12, 6))
+  category_colors = {
+    "Saving": "green",
+    "Taxes": "red",
+    "Healthcare": "orange",
+    "Housing": "blue",
+    "Food": "brown",
+    "Recreational": "pink",
+    "Other": "yellow"
+  }
+  for category in spending_percentage.columns:
+    color = category_colors.get(category, "gray")  # Default to gray if category not found
+    plt.plot(spending_percentage.index.astype(str), spending_percentage[category], label=category, color=color)
+
+  plt.xlabel("Month")
+  plt.ylabel("Percentage of Total Spending")
+  plt.title("Monthly Spending Breakdown by Category")
+  plt.legend(loc="upper right", bbox_to_anchor=(1.3, 1), title="Categories")
+  plt.xticks(rotation=45)
+  plt.grid()
+  #plt.show()
+  plt.savefig("spending_breakdown.png")
+
 if __name__ == "__main__":
   cli = argparse.ArgumentParser(description="Ingest and analyze Personal Capital aggregated expenses file.")
   cli.add_argument("file", type=str, help="Path to the aggregated expenses file.")
   cli.add_argument("-q", "--quicklook", action="store_true", help="Quicklook analysis of income/expenses")
   cli.add_argument("-c", "--category", action="store_true", help="Categorical analysis of Rent, Travel, Car-Related, and Other expenses based on keywords")
+  cli.add_argument("-p", "--plot", action="store_true", help="Analyze spending categories on a line plot")
   args = cli.parse_args()
   validate_empowerfile(args.file)
   doall = (0 == 0 + args.quicklook + args.category)
@@ -122,3 +219,5 @@ if __name__ == "__main__":
     quicklook(args.file)
   if doall or args.category:
     category_analysis(args.file)
+  if args.plot:
+    category_plot(args.file)

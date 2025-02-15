@@ -126,5 +126,5 @@ if __name__ == "__main__":
   df = pandas.read_csv(args.file)
   print(df.describe())
   if(args.model):
-    model = lm(formula = args.model).fit()
+    model = lm(formula = args.model, data=df).fit()
     lmsummary(model)
