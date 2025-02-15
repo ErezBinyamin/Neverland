@@ -21,6 +21,7 @@ RUN apt-get install -y --no-install-recommends \
 RUN pip3 install --no-cache-dir \
     pandas \
     numpy \
+    statsmodels \
     requests
 
 # Configure bash environment
