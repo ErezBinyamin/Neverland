@@ -1,12 +1,15 @@
+#!/usr/bin/python3
 """
-Analysis of a data set from US dept of labor Bureau of Labor Statistics to reveal undelying connection between gender, race, and physical labor
+Analysis helper functions for linear regression
 
-TLDR;
-    - There is an inverse relationship between the percentage representation of women in an industry, and that industries liklihood to be classified as "physical labor"
-    - The percentage of Whites, Blacks, Hispanics, Asians, and the total number of people employed in an industry are irrelevant in predicting if the industry will be classified as “physical labor”.
-    - Women are more likely to work in industries with larger populations.
-
+Workflow:
+  - mydf = pandas.read_csv(CSVFILE)
+  - print(mydf.describe())
+  - model = lm(formula = 'phy_lbr ~ log(tot_emp) + women + white + black + asian + hispanic', data=mydf).fit()
+  - lmsummary(model)
+  - bptest(model)
 """
+import argparse
 import pandas
 from pdb import set_trace as bp
 from numpy import log
@@ -114,76 +117,14 @@ def lmsummary(lm):
         lm.fvalue, lm.df_model, lm.df_resid, lm.f_pvalue
     ))
 
+if __name__ == "__main__":
+  cli = argparse.ArgumentParser(description="Do a linear regression on a csv file")
+  cli.add_argument("-f", "--file", type=str, help="Path to the CSV file to be analyzed.")
+  cli.add_argument("-m", "--model", type=str, help="Model you'd like to test ie: 'y ~ log(x1) + x2 + x3'.")
+  args = cli.parse_args()
 
-#	phy_lbr:	Boolean is profession "Physical Labor"
-#	tot_emp:	Total employed(Thousands)
-#	women:		Women(%)
-#	white:		White(%)
-#	black:		Black(%)
-#	asian:		Asian(%)
-#	hispanic:	Hispanic(%)
-print("### Data Summary ###")
-bls_df = pandas.read_csv(BLS_CSV)
-print(bls_df.describe())
-
-# M1
-# phy_lbr(i) = β_0 + β_1 ln(tot_emp(i)) + β_2 women(i) + β_3 white(i) + β_4 black(i) + β_5 asian(i) + β_6 hispanic(i) + u(i)
-print("### Linear model M1 ###")
-bls_ols_phylbr = lm(formula = "phy_lbr ~ log(tot_emp) + women + white + black + asian + hispanic", data=bls_df).fit()
-#print(bls_ols_phylbr.summary())
-lmsummary(bls_ols_phylbr)
-
-# F test: INSIGNIFICANT VARIABLES: tot_emp white black asian and hispanic
-#ftest_1 <- linearHypothesis(bls_ols_phylbr, c("log(tot_emp)=0", "white=0", "black=0", "asian=0", "hispanic=0"))
-#TODO
-
-# Testing homoskedasticity
-print("### M1 homoskedasticity test ###")
-print(bptest(bls_ols_phylbr))
-
-# T-Test of coefficients: heteroskedasticity-corrected
-#TODO
-
-# M2
-# women(i) = β_0 + β_1 ln(tot_emp(i)) + β_2 phy_lbr + β_3 white(i) + β_4 black(i) + β_5 asian(i) + β_6 hispanic(i) + u(i)
-print("### Linear model M2 ###")
-bls_ols_women = lm(formula = "women ~ log(tot_emp) + phy_lbr + white + black + asian + hispanic", data=bls_df).fit()
-#print(bls_ols_women.summary())
-lmsummary(bls_ols_women)
-
-# F test: asain=1
-#ftest_2 <- linearHypothesis(bls_ols_phylbr, c("asian=1"))
-#TODO
-
-# Testing homoskedasticity
-print("### M2 homoskedasticity test ###")
-print(bptest(bls_ols_women))
-
-# T-Test of coefficients: heteroskedasticity-corrected
-#TODO
-
-#################################################################################################################
-# Extra fun stuff :)
-#################################################################################################################
-# M1: Ignoring insignificant variables
-# Exasterbate M1 findings
-#bls_ols_phylbr_clean = lm(formula = "phy_lbr ~ women", data=bls_df).fit()
-#print(bls_ols_phylbr_clean.summary())
-
-# M2: Ignoring insignificant variables
-# Exasterbate M2 findings
-#bls_ols_women_clean = lm(formula = "women ~ log(tot_emp) + phy_lbr + white + black + asian", data=bls_df).fit()
-#print(bls_ols_phylbr_clean.summary())
-
-# Actual numbers of things
-# women variable is % of workforce that is women
-# tot_emp is the number of people in the workforce
-# women * tot_emp is the number of WOMEN in the workforce
-#bls_ols_num = lm(formula = "I(women*tot_emp) ~ phy_lbr + I(white*tot_emp) + I(black*tot_emp) + I(asian*tot_emp) + I(hispanic*tot_emp)", data = bls_df).fit()
-#bls_ols_num = lm(formula = "phy_lbr ~ I(women*tot_emp) + I(white*tot_emp) + I(black*tot_emp) + I(asian*tot_emp) + I(hispanic*tot_emp)", data = bls_df).fit()
-#print(bls_ols_phylbr_clean.summary())
-
-# Percent increase in population as a function of demographics
-# Which demographics are indicators of labor force growth
-#bls_ols_totemp = lm(formula = "log(tot_emp) ~ phy_lbr + women + white + black + asian + hispanic", data = bls_df).fit()
-#print(bls_ols_totemp.summary())
+  df = pandas.read_csv(args.file)
+  print(df.describe())
+  if(args.model):
+    model = lm(formula = args.model).fit()
+    lmsummary(model)
