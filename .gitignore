@@ -7,4 +7,4 @@ fireflyIII/*.env
 fireflyIII/*.yml
 
 # datascience
-datascience/data
+analyze/res/data
