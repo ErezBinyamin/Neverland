@@ -4,7 +4,7 @@
 # IMAGE_NAME=cyber
 # DEPS=Dockerfile
 # include ../Makefile.parent
-KEEPFILE?=.imagebuild_$(IMAGE_NAME)
+KEEPFILE?=.imagebuild_$(shell echo $(IMAGE_NAME) | cut -d ':' -f 1)
 DOCKER_USERNAME?=erezbinyamin
 PUSHTAG?=latest
 BFLAGS?=
