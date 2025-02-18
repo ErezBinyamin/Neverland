@@ -3,6 +3,8 @@ FROM scottyhardy/docker-wine:latest
 RUN apt-get update --fix-missing
 RUN apt-get install --install-recommends -y wine-staging winetricks;
 RUN apt-get install -y --no-install-recommends \
+    net-tools \
+    iputils-ping \
     python3 \
     python3-pip
 RUN pip install gdown

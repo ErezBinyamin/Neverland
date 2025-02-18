@@ -8,7 +8,7 @@ alias ls='ls --color'
 
 cat /home/splash.txt
 
-INSTALLDIR="/root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth/"
+INSTALLDIR="/root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth"
 if [ -d "${INSTALLDIR}" ]
 then
 	printf "\n\n
