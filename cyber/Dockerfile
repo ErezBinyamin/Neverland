@@ -34,20 +34,39 @@ RUN apt-get install -y --no-install-recommends \
     tcpdump \
     tshark \
     whois \
+    netwox \
+    net-tools \
+    iputils-ping \
+    dnsutils \
+    aircrack-ng \
+    traceroute \
     mtr
 RUN apt-get install -y --no-install-recommends \
     build-essential \
     binwalk \
     forensics-all \
-    net-tools \
-    iputils-ping \
-    dnsutils \
-    aircrack-ng \
     binutils \
     binutils-arm-none-eabi \
-    netwox \
-    traceroute
-
+    dwarfdump
+RUN apt-get install -y --no-install-recommends \
+    strace \
+    ltrace
+#RUN apt-get install -y --no-install-recommends \
+#    qemu \
+#    qemu-utils \
+#    qemu-user \
+#    qemu-user-static \
+#    qemu-block-extra \
+#    qemu-system \
+#    qemu-system-mips \
+#    qemu-system-arm \
+#    qemu-system-ppc \
+#    qemu-system-s390x \
+#    qemu-system-sparc \
+#    qemu-system-x86 \
+#    qemu-system-common \
+#    qemu-system-data
+ 
 # Install additional Python packages for pentesting
 RUN pipx ensurepath
 RUN pipx install \
