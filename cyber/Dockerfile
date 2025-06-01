@@ -1,83 +1,88 @@
-# Use the official Ubuntu LTS image as a base
-FROM python:latest
+FROM debian:bookworm-slim
 
-# Set the timezone to avoid interactive prompts
+LABEL maintainer="ezbin@pm.me"
+LABEL description="Lightweight headless cyber RE and hardware/network/binary analysis toolkit"
+
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/New_York
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
-# Update the package list and install essential tools
-RUN apt-get update --fix-missing
-RUN apt-get install -y --no-install-recommends \
+# Install base libraries
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libusb-1.0-0 libudev1 libstdc++6 zlib1g libncurses6 libreadline8 \
+    libffi8 libssl3 ca-certificates libmagic1 libpcap0.8 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install base tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    procps \
+    most \
+    vim \
     bc \
     curl \
-    wget \
     git \
-    vim \
-    snapd \
-    python3-full \
+    tmux \
+    unzip \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# --- python ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
     python3-pip \
+    python3-dev \
     pipx \
-    software-properties-common \
-    bsdmainutils
-RUN git clone https://github.com/radareorg/radare2.git /opt/radare2 \
-    && /opt/radare2/sys/install.sh
-RUN apt-get install -y --no-install-recommends \
+    python3-capstone \
+    python3-keystone \
+    python3-unicorn \
+    && rm -rf /var/lib/apt/lists/* \
+    && pipx ensurepath
+
+# --- Section: Hardware Hacking ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
     usbutils \
     openocd \
     udev \
     screen \
     dosfstools \
-    parted
-RUN apt-get install -y --no-install-recommends \
-    netcat-traditional \
+    parted \
+    flashrom \
+    sigrok-cli \
+    fxload \
+    i2c-tools \
+    && rm -rf /var/lib/apt/lists/*
+
+# --- Section: Networking Tools ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
     nmap \
+    netcat-traditional \
+    socat \
     tcpdump \
     tshark \
-    whois \
-    netwox \
-    net-tools \
     iputils-ping \
-    dnsutils \
-    aircrack-ng \
     traceroute \
-    mtr
-RUN apt-get install -y --no-install-recommends \
-    build-essential \
-    binwalk \
-    forensics-all \
-    binutils \
-    binutils-arm-none-eabi \
-    dwarfdump
-RUN apt-get install -y --no-install-recommends \
-    strace \
-    ltrace
-#RUN apt-get install -y --no-install-recommends \
-#    qemu \
-#    qemu-utils \
-#    qemu-user \
-#    qemu-user-static \
-#    qemu-block-extra \
-#    qemu-system \
-#    qemu-system-mips \
-#    qemu-system-arm \
-#    qemu-system-ppc \
-#    qemu-system-s390x \
-#    qemu-system-sparc \
-#    qemu-system-x86 \
-#    qemu-system-common \
-#    qemu-system-data
- 
-# Install additional Python packages for pentesting
-RUN pipx ensurepath
-RUN pipx install \
-    pwntools
-# Optional: Install Metasploit
-#RUN curl https://raw.githubusercontent.com/rapid7/metasploit-framework/master/msfinstall | sh
+    whois \
+    dnsutils \
+    arp-scan \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install pwndbg
-RUN git clone --recursive https://github.com/pwndbg/pwndbg.git; \
-    cd pwndbg; \
-    ./setup.sh
+# --- Section: Binary/Forensics Tools ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc-arm-none-eabi gdb-arm-none-eabi \
+    binutils \
+    dwarfdump \
+    binwalk \
+    file \
+    xxd \
+    lsof \
+    strace \
+    ltrace \
+    && rm -rf /var/lib/apt/lists/*
+
+# --- gef ---
+RUN bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
 
 # Configure bash environment
 WORKDIR /root
@@ -88,10 +93,7 @@ RUN \
 
 # Clean up APT when done to reduce image size
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN apt update
 
-# Set working directory
-WORKDIR /root
+WORKDIR /workspace
+CMD ["/bin/bash"]
 
-# Entry point for the container
-ENTRYPOINT ["/bin/bash"]
