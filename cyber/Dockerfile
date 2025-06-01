@@ -51,6 +51,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sigrok-cli \
     fxload \
     i2c-tools \
+    bluez \
     && rm -rf /var/lib/apt/lists/*
 
 # --- Section: Networking Tools ---
