@@ -7,16 +7,28 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/New_York
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
+#ENV LANG en_US.UTF-8
 
 # Install base libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libusb-1.0-0 libudev1 libstdc++6 zlib1g libncurses6 libreadline8 \
-    libffi8 libssl3 ca-certificates libmagic1 libpcap0.8 \
+    libusb-1.0-0 \
+    libftdi1-2 \
+    libudev1 \
+    libstdc++6 \
+    zlib1g \
+    libncurses6 \
+    libreadline8 \
+    libffi8 \
+    libssl3 \
+    ca-certificates \
+    libmagic1 \
+    libpcap0.8 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install base tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     procps \
+    less \
     most \
     vim \
     bc \
@@ -25,7 +37,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tmux \
     unzip \
     build-essential \
+    locales \
     && rm -rf /var/lib/apt/lists/*
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen
 
 # --- python ---
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -52,6 +67,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fxload \
     i2c-tools \
     bluez \
+    dfu-util \
     && rm -rf /var/lib/apt/lists/*
 
 # --- Section: Networking Tools ---
@@ -82,8 +98,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ltrace \
     && rm -rf /var/lib/apt/lists/*
 
-# --- gef ---
-RUN bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
+# --- gdb extra gef/pwndbg ---
+#RUN bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
+RUN git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg && \
+    cd /opt/pwndbg && ./setup.sh
 
 # Configure bash environment
 WORKDIR /root
