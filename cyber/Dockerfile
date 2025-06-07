@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     libmagic1 \
     libpcap0.8 \
+    libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install base tools
@@ -36,7 +37,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     tmux \
     unzip \
-    build-essential \
     locales \
     && rm -rf /var/lib/apt/lists/*
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
@@ -82,6 +82,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     whois \
     dnsutils \
     arp-scan \
+    lsof \
     && rm -rf /var/lib/apt/lists/*
 
 # --- Section: Binary/Forensics Tools ---
@@ -93,9 +94,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     binwalk \
     file \
     xxd \
-    lsof \
     strace \
     ltrace \
+    && rm -rf /var/lib/apt/lists/*
+# --- Section: compression/decompresion tools for binwalk -e ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gzip \
+    bzip2 \
+    tar \
+    unrar-free \
+    p7zip-full \
+    cpio \
+    zstd \
+    lzop \
+    xz-utils \
+    squashfs-tools \
+    e2tools \
+    sleuthkit \
     && rm -rf /var/lib/apt/lists/*
 
 # --- gdb extra gef/pwndbg ---
