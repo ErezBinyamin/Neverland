@@ -2,6 +2,7 @@
 # Functions that will launch docker containers
 ee2wine() { 	
 	local IMAGE_NAME=${IMAGE_NAME:-erezbinyamin/ee2wine:latest}
+  docker images | grep -q 'ee2wine.*installed' && IMAGE_NAME=$(docker images | grep 'ee2wine.*installed' | sed 's/wine.*installed.*/wine:installed/')
 	if [ -z "${XAUTHORITY:-${HOME}/.Xauthority}" ]
 	then
 		echo "ERROR: No valid .Xauthority file found for X11"
