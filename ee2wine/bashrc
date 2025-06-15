@@ -8,9 +8,17 @@ alias ls='ls --color'
 
 cat /home/splash.txt
 
-INSTALLDIR="/root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth"
+export INSTALLDIR="/root/.PlayOnLinux/wineprefix/Games/drive_c/Program Files/Empire Earth"
 if [ -d "${INSTALLDIR}" ]
 then
+  ee1() {
+    cd "${INSTALLDIR}/Empire Earth"
+    wine "Empire Earth.exe"
+  }
+  ee2() {
+    cd "${INSTALLDIR}/Empire Earth - The Art of Conquest"
+    wine EE-AOC.exe
+  }
 	printf "\n\n
 		Path to EE original : \"${INSTALLDIR}/Empire Earth\"
 		Path to EE expansion: \"${INSTALLDIR}/Empire Earth - The Art of Conquest\"
@@ -18,6 +26,7 @@ then
 		To play Empire Earth:
 			1. Move to game directory     : '# cd DIR'
 			2. Launch executable with wine: '# wine GAME.exe'
+      3. Or just call functions: ee1, or ee2
 		\n\n"
 else
 	printf "\n\n
