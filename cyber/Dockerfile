@@ -128,6 +128,30 @@ RUN \
 # Clean up APT when done to reduce image size
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Manually copy jlink.deb
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libxrender1 \
+    libxcb-render0 \
+    libxcb-render-util0 \
+    libxcb-shape0 \
+    libxcb-randr0 \
+    libxcb-xfixes0 \
+    libxcb-sync1 \
+    libxcb-shm0 \
+    libxcb-icccm4 \
+    libxcb-keysyms1 \
+    libxcb-image0 \
+    libxkbcommon0 \
+    libxkbcommon-x11-0 \
+    libfontconfig1 \
+    libfreetype6 \
+    libx11-xcb1 \
+    && rm -rf /var/lib/apt/lists/*
+COPY jlink.deb /tmp/jlink.deb 
+RUN dpkg -i /tmp/jlink.deb || true
+ENV PATH="/opt/SEGGER/JLink:${PATH}"
+
+
 WORKDIR /workspace
 CMD ["/bin/bash"]
 
