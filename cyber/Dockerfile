@@ -97,6 +97,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     strace \
     ltrace \
     && rm -rf /var/lib/apt/lists/*
+
 # --- Section: compression/decompresion tools for binwalk -e ---
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gzip \
@@ -112,21 +113,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     e2tools \
     sleuthkit \
     && rm -rf /var/lib/apt/lists/*
-
-# --- gdb extra gef/pwndbg ---
-#RUN bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
-RUN git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg && \
-    cd /opt/pwndbg && ./setup.sh
-
-# Configure bash environment
-WORKDIR /root
-RUN \
-	git clone --recursive https://github.com/ErezBinyamin/dotfiles.git; \
-	[ -f ~/.bashrc ] && cp ~/.bashrc ~/.bashrc.bak; \
-	printf '\n# Dotfiles: https://github.com/ErezBinyamin/dotfiles.git;\nDOTFILES=/root/dotfiles;\n[ -d ${DOTFILES} ] && source ${DOTFILES}/top.sh || echo "[ERROR] DirectoryNotFound: ${DOTFILES}";\n\n' >> ~/.bashrc;
-
-# Clean up APT when done to reduce image size
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Manually copy jlink.deb
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -151,6 +137,20 @@ COPY jlink.deb /tmp/jlink.deb
 RUN dpkg -i /tmp/jlink.deb || true
 ENV PATH="/opt/SEGGER/JLink:${PATH}"
 
+# --- gdb extra gef/pwndbg ---
+#RUN bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
+RUN git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg && \
+    cd /opt/pwndbg && ./setup.sh
+
+# Configure bash environment
+WORKDIR /root
+RUN \
+	git clone --recursive https://github.com/ErezBinyamin/dotfiles.git; \
+	[ -f ~/.bashrc ] && cp ~/.bashrc ~/.bashrc.bak; \
+	printf '\n# Dotfiles: https://github.com/ErezBinyamin/dotfiles.git;\nDOTFILES=/root/dotfiles;\n[ -d ${DOTFILES} ] && source ${DOTFILES}/top.sh || echo "[ERROR] DirectoryNotFound: ${DOTFILES}";\n\n' >> ~/.bashrc;
+
+# Clean up APT when done to reduce image size
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR /workspace
 CMD ["/bin/bash"]
