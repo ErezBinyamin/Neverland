@@ -133,14 +133,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libfreetype6 \
     libx11-xcb1 \
     && rm -rf /var/lib/apt/lists/*
-COPY jlink.deb /tmp/jlink.deb 
-RUN dpkg -i /tmp/jlink.deb || true
-ENV PATH="/opt/SEGGER/JLink:${PATH}"
+
+RUN curl https://www.segger.com/downloads/jlink/JLink_Linux_V800c_x86_64.deb -o /tmp/jlink.deb && \
+    apt-get update && apt-get install -y libncurses6 libusb-1.0-0 && \
+    dpkg -i /tmp/jlink.deb || apt-get -fy install && \
+    rm /tmp/jlink.deb
+ENV PATH="${PATH}:/opt/SEGGER/JLink"
 
 # --- gdb extra gef/pwndbg ---
 #RUN bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
 RUN git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg && \
     cd /opt/pwndbg && ./setup.sh
+
+# -- nrfutil
+# Source: https://academy.nordicsemi.com/courses/bluetooth-low-energy-fundamentals/lessons/lesson-6-bluetooth-le-sniffer/topic/nrf-sniffer-for-bluetooth-le/
+RUN curl 'https://files.nordicsemi.com/ui/api/v1/download?repoKey=swtools&path=external/nrfutil/executables/x86_64-unknown-linux-gnu/nrfutil&isNativeBrowsing=false' > nrfutil \
+    && chmod +x ./nrfutil \
+    && ./nrfutil install ble-sniffer completion device \
+    && ./nrfutil list \
+    && rm ./nrfutil
+ENV PATH="${PATH}:/root/.nrfutil/bin/"
 
 # Configure bash environment
 WORKDIR /root
