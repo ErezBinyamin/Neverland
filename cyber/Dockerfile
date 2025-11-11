@@ -72,6 +72,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # --- Section: Networking Tools ---
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    net-tools \
     nmap \
     netcat-traditional \
     socat \
