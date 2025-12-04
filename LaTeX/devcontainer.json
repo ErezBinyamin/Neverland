@@ -1,0 +1,80 @@
+{
+    "name": "project-dev",
+    "dockerComposeFile": ["docker-compose.yml"],
+    "service": "vscode",
+    "runServices": ["vscode"],
+    "shutdownAction": "stopCompose",
+    "workspaceFolder": "/workspace",
+    "postCreateCommand": "",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+		"streetsidesoftware.code-spell-checker",
+                "james-yu.latex-workshop",
+		"valentjn.vscode-ltex",
+                "shardulm94.trailing-spaces",
+                "stkb.rewrap"
+            ],
+            "settings": {
+                "files.eol": "\n",
+		"cSpell.language": "en-US",
+                "cSpell.enabledLanguageIds": [
+                  "latex",
+                  "tex",
+                  "bibtex",
+                  "plaintext",
+                  "markdown"
+                ],
+                "cSpell.ignorePaths": [
+                  "build",
+                  "out",
+                  "_minted-*",
+                  "**/node_modules/**"
+                ],
+                // For better LaTeX-specific grammar checking
+                "ltex.language": "en-US",
+                "ltex.enabled": true
+                // Latex settings
+                "latex-workshop.linting.chktex.enabled": true,
+                "latex-workshop.linting.chktex.exec.path": "chktex",
+                "latex-workshop.latex.clean.subfolder.enabled": true,
+                "latex-workshop.latex.autoClean.run": "onBuilt",
+                "editor.formatOnSave": true,
+                "files.associations": {
+                    "*.tex": "latex"
+                },
+                "latex-workshop.latexindent.path": "latexindent",
+                "latex-workshop.latexindent.args": [
+                    "-c",
+                    "%DIR%/",
+                    "%TMPFILE%",
+                    "-y=defaultIndent: '%INDENT%'"
+                ],
+		"latex-workshop.latex.tools": [
+                    {
+                        "name": "latexmk (shell-escape)",
+                        "command": "latexmk",
+                        "args": [
+                            "-synctex=1",
+                            "-interaction=nonstopmode",
+                            "-file-line-error",
+                            "-shell-escape",
+                            "-pdf",
+                            "%DOC%"
+                        ]
+                    }
+                ],
+                "latex-workshop.latex.recipes": [
+                    {
+                        "name": "latexmk (shell-escape)",
+                        "tools": ["latexmk (shell-escape)"]
+                    }
+                ],
+                "latex-workshop.latex.recipe.default": "latexmk (shell-escape)"
+            }
+        }
+    },
+    "containerEnv": {
+    	"openout_any": "a"
+  }
+}
