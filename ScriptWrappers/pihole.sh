@@ -1,5 +1,16 @@
-#!/bin/bash
-# Functions that will launch docker containers
+local_ip ()  { 
+    ip -family inet address | grep --color=auto 'noprefixroute' | grep --color=auto -Po '(?<=inet[ ])([0-9]{1,3}[.]){3}[0-9]{1,3}' | head -n1
+}
+
+next_port () { 
+    local PORT=${1};
+    local USED_PORTS=$(echo $(netstat -awlpunt 2>/dev/null | grep -Eo ':[0-9]+ ' | tr -d ':' | sort -un));
+    local NEXT_PORT=${PORT:-1024};
+    while [[ "${USED_PORTS}" =~ "${NEXT_PORT}" ]]; do
+        let NEXT_PORT++;
+    done;
+    echo ${NEXT_PORT}
+}
 
 pihole() {
 	if docker container ls 2>/dev/null | grep -q 'pihole'
@@ -20,9 +31,9 @@ pihole() {
 		local P_HTTPS=$(next_port 443)
 		local TIMEZONE='America/New_York' # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 		local WEBPASSWORD='pipass'
-		local EXTERNAL_IP=$(public_ip)
+		local SERVER_IP=$(local_ip)
 		
-		printf "\nStarting up pihole container: http://localhost:${P_HTTP}\n\n"
+		printf "\nStarting up pihole container: http://${SERVER_IP}:${P_HTTP}\n\n"
 		#printf "\nUsing Ports:\n\tDNS: ${P_DNS}\n\tHTTP: ${P_HTTP}\n\tHTTPS: ${P_HTTPS}\n\tDHCP: ${P_DHCP}\n\n"
 		printf "\nUsing Ports:\n\tDNS: ${P_DNS}\n\tHTTP: ${P_HTTP}\n\tHTTPS: ${P_HTTPS}\n\n"
 
@@ -37,23 +48,37 @@ pihole() {
 		    --publish ${P_HTTPS}:443/tcp \
 		    --volume "${PIHOLE_BASE}/etc-pihole/:/etc/pihole/" \
 		    --volume "${PIHOLE_BASE}/etc-dnsmasq.d/:/etc/dnsmasq.d/" \
-		    --dns=127.0.0.1 \
 		    --dns=1.1.1.1 \
+		    --dns=8.8.8.8 \
 		    --restart=unless-stopped \
 		    --hostname pi.hole \
 		    --env VIRTUAL_HOST="pi.hole" \
 		    --env PROXY_LOCATION="pi.hole" \
 		    --env PIHOLE_DNS_="127.0.0.1#5353;8.8.8.8;8.8.4.4;1.1.1.1" \
 		    --env TZ=${TIMEZONE} \
-		    --env ServerIP=${EXTERNAL_IP} \
+		    --env ServerIP=${SERVER_IP} \
 		    --env WEBPASSWORD=${WEBPASSWORD} \
 		    --restart=unless-stopped \
 		    --cap-add=NET_ADMIN \
 		    pihole/pihole:latest
 
+		if [ $? -ne 0 ]
+		then
+			echo "[ERROR] Docker is complaining and wont start pihole"
+			return 1
+		fi
+
+		printf "\n------------\nSleeping for 10 seconds\n"
 		sleep 10
 		wait
 
+		if ! docker ps | grep --quiet 'pihole'
+		then
+			echo "[ERROR] pihole containter not running."
+			return 1
+		fi
+
+		printf "\n------------\n> Checking container health:\n"
 		for i in $(seq 1 20); do
 		    if [ "$(docker inspect -f "{{.State.Health.Status}}" pihole)" == "healthy" ] ; then
 		        printf ' OK'
