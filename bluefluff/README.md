@@ -35,9 +35,10 @@ bluefluff reverse-engineers the Furby Connect's BLE protocol, exposing it throug
 ```bash
 docker run -it \
   --network host \
-  --privileged \
   --device /dev/bus/usb \
-  --device /dev/hci0 \
+  --cap-add NET_ADMIN \
+  --cap-add NET_RAW \
+  --volume /var/run/dbus:/var/run/dbus
   erezbinyamin/bluefluff
 ```
 
