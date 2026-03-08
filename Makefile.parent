@@ -19,8 +19,11 @@ rebuild:
 	docker build $(BFLAGS) --no-cache --tag $(IMAGE_NAME) .
 	touch $(KEEPFILE)
 
-bash: build
+run: build
 	docker run $(RFLAGS) $(IMAGE_NAME)
+
+bash: build
+	docker run $(RFLAGS) --entrypoint /bin/bash $(IMAGE_NAME)
 
 clean:
 	docker images | grep -q "^$(IMAGE_NAME)" && docker image rm $(IMAGE_NAME) || true
