@@ -38,7 +38,7 @@ docker run -it \
   --privileged \
   --device /dev/bus/usb \
   --device /dev/hci0 \
-  yourdockerhubusername/bluefluff
+  erezbinyamin/bluefluff
 ```
 
 > **Note:** `--network host` is required so that [noble](https://github.com/sandeepmistry/noble) (the BLE library) can access raw HCI sockets. If your Bluetooth adapter hasn't initialized yet, ensure `hciconfig` shows your adapter on the host before running.
