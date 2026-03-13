@@ -58,8 +58,6 @@ The web UI will automatically scan for nearby Furby Connect devices advertising 
 - 📖 **BLE Protocol Docs:** [doc/bluetooth.md](https://github.com/Jeija/bluefluff/blob/master/doc/bluetooth.md)
 - 🎬 **YouTube Demo:** [Watch on YouTube](https://www.youtube.com/watch?v=FkblA_CxHgU)
 
----
-
 ## License
 
 The bluefluff project is licensed under the [MIT License](https://github.com/Jeija/bluefluff/blob/master/LICENSE.md).
