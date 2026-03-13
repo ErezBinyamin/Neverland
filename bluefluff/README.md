@@ -2,14 +2,6 @@
 
 A Dockerized version of [bluefluff](https://github.com/Jeija/bluefluff) by Jeija — a reverse-engineered Bluetooth Low Energy API and web UI for controlling **Furby Connect** toys from your Linux computer or Raspberry Pi.
 
----
-
-## What is bluefluff?
-
-bluefluff reverse-engineers the Furby Connect's BLE protocol, exposing it through a simple HTTP API (`fluffd`) and a browser-based control panel (`fluffd-client`). 
-
----
-
 ## Requirements
 
 - A Linux host with Bluetooth Low Energy support (built-in or USB BT 4.0+ adapter)
@@ -17,8 +9,6 @@ bluefluff reverse-engineers the Furby Connect's BLE protocol, exposing it throug
 - Docker
 
 > **macOS / Windows:** BLE hardware passthrough through Docker Desktop's VM layer is not supported. This image is intended for **Linux hosts only**.
-
----
 
 ## Quick Start
 
@@ -52,8 +42,6 @@ Once the container is running, open your browser to:
 | **fluffd HTTP API** | `http://localhost:3872` | Raw HTTP API for sending BLE commands |
 
 The web UI will automatically scan for nearby Furby Connect devices advertising over BLE and connect to them.
-
----
 
 ## Ports
 
