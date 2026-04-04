@@ -9,3 +9,6 @@ fireflyIII/*.yml
 
 # datascience
 analyze/res/data
+
+# nrfSDK
+nrfSDK/res
