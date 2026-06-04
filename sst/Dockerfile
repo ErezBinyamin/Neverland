@@ -1,5 +1,5 @@
 # Use the official Ubuntu LTS image as a base
-FROM i686/ubuntu
+FROM i386/ubuntu:bionic
 
 # Set the timezone to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
@@ -22,6 +22,6 @@ WORKDIR /root
 ADD https://almy.us/files/sstlinux.zip /root/
 RUN unzip sstlinux.zip
 ## Create .bashrc with cool ascii art splash screen. base64 encode to avoid special chars in script
-COPY splash.txt /home/splash.txt
+COPY art/ /home/art/
 COPY bashrc /root/.bashrc
 

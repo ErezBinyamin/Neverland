@@ -1,5 +1,5 @@
 IMAGE_NAME=sst
-DEPS=Dockerfile
+DEPS=Dockerfile bashrc art/
 BFLAGS=--platform linux/386
 include ../Makefile.parent
 
