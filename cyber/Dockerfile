@@ -76,7 +76,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nmap \
     netcat-traditional \
     socat \
-    tcpdump \
+    termshark \
+    tcpflow \
     tshark \
     iputils-ping \
     traceroute \
